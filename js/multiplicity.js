@@ -4,9 +4,42 @@ var history = [
 			"ans": "8"
 		},
 	],
-	appendExp = function(exp) {
-		$('input').val($('input').val() + exp);
-	}
+	insertExp = function(text) {
+
+		//By Scott Klarr, from http://bit.ly/1dELy4Z
+
+	    var txtarea = document.getElementsByTagName("input")[0];
+	    var scrollPos = txtarea.scrollTop;
+	    var strPos = 0;
+	    var br = ((txtarea.selectionStart || txtarea.selectionStart == '0') ? 
+	        "ff" : (document.selection ? "ie" : false ) );
+	    if (br == "ie") { 
+	        txtarea.focus();
+	        var range = document.selection.createRange();
+	        range.moveStart ('character', -txtarea.value.length);
+	        strPos = range.text.length;
+	    }
+	    else if (br == "ff") strPos = txtarea.selectionStart;
+
+	    var front = (txtarea.value).substring(0,strPos);  
+	    var back = (txtarea.value).substring(strPos,txtarea.value.length); 
+	    txtarea.value=front+text+back;
+	    strPos = strPos + text.length;
+	    if (br == "ie") {
+	        txtarea.focus();
+	        var range = document.selection.createRange();
+	        range.moveStart ('character', -txtarea.value.length);
+	        range.moveStart ('character', strPos);
+	        range.moveEnd ('character', 0);
+	        range.select();
+	    }
+	    else if (br == "ff") {
+	        txtarea.selectionStart = strPos;
+	        txtarea.selectionEnd = strPos;
+	        txtarea.focus();
+	    }
+	    txtarea.scrollTop = scrollPos;
+	},
 	assess = function(exp) {
 		if (exp.length > 0) {
 			if (exp.indexOf("=") > -1) {
@@ -21,7 +54,7 @@ var history = [
 		}
 		return ans;
 	},
-	log = function() {
+	log = function(exp, ans) {
 
 	}
 
@@ -47,7 +80,7 @@ $(document).ready(function() {
 	}).mousedown(function(event) {
 		switch (event.which) {
 			case 1:
-				appendExp($(this).html());
+				insertExp($(this).html());
 				break;
 			case 3:
 				$('textarea').val($(this).html()).addClass('visible').keyup(function() {
