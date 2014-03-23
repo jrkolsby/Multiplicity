@@ -1,0 +1,89 @@
+#wrap {
+	height: 100%;
+	width: 100%;
+	padding: 0 50px;
+	margin: 0 auto;
+	max-width: 900px;
+}
+textarea {
+	position: fixed;
+	margin: auto;
+	top: 0;
+	bottom: 0;
+	width: 100%;
+	text-align: center;
+	height: 2em;
+	font-size: 2em;
+	font-weight: 100;
+	font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Verdana, sans-serif;
+	box-shadow: 0 0 0 3000px rgba(255,255,255,0.7);
+	background: rgba(255,255,255,0.7);
+	border: none;
+	resize: none;
+	opacity: 0;
+	pointer-events: none;
+	color: #111;
+	transition: .2s opacity ease-in-out;
+	-webkit-transition: .2s opacity ease-in-out;
+}
+textarea.visible {
+	pointer-events: all;
+	opacity: 1;
+}
+.row {
+	width: 100%;
+	overflow: auto;
+	border-bottom: 2px solid #E6E6E6;
+}
+.row div,
+.row input {
+	font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Verdana, sans-serif;
+	font-size: 1.3em;
+	min-height: 1.3em;
+	margin: 28px 0;
+	color: #333;
+	line-height: 125%;
+	padding: 6px 12px;
+	border-radius: 9px;
+	cursor: pointer;
+	transition: .15s background ease-in-out, .15s color ease-in-out;
+	-webkit-transition: .15s background ease-in-out, .15s color ease-in-out;
+}
+.row div:hover {
+	background: #508BFA;
+	color: #fff;
+}
+.row div:last-child {
+	float: right;
+	text-align: right;
+	max-width: 40%;
+}
+.row div:first-child {
+	float: left;
+	text-align: left;
+	max-width: 60%
+}
+.row input {
+	border: none;
+	cursor: auto;
+	width: 100%;
+	max-width: 100%;
+	padding: 0 12px;
+	background: transparent;
+	color: #333;
+}
+
+@media only screen and (max-width: 480px) {
+	#wrap {
+		padding: 0 20px;
+	}
+	.row div,
+	.row input {
+		font-size: 1em;
+		min-height: 1em;
+		padding: 5px 9px;
+	}
+	.row input {
+		padding: 0 9px;
+	}
+}
