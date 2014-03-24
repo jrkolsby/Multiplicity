@@ -4,9 +4,7 @@ var history = [],
 		"pi": 3.141592653589
 	},
 	insertExp = function(text) {
-
-		//By Scott Klarr, from http://bit.ly/1dELy4Z
-
+		//insertExp by Scott Klarr, from http://bit.ly/1dELy4Z
 	    var txtarea = document.getElementsByTagName("input")[0],
 	    	scrollPos = txtarea.scrollTop,
 	    	strPos = 0;
@@ -50,6 +48,13 @@ var history = [],
 	assess = function(exp) {
 		exp = exp.replace(/(\)\()/g, ")*(") //For multiplying polynomials
 				 .replace(/\s+/g, "");
+				 
+		//Coefficient solution by Jack at http://bit.ly/OPNKkd
+		exp = exp.replace(/\d[a-z]|[a-z]\d/i, function($0) {
+    		return $0[0] + '*' + $0[1]; 
+		});
+
+		console.log(exp);
 
 		if (exp.length > 0) {
 			if (exp.indexOf("=") > -1) {
@@ -59,6 +64,7 @@ var history = [],
 					str2 = exp.substring(eq+1);
 				if (!canParse(str1) && canParse(str2)) { //If you can't parse str1
 					//Assign value to str1
+					console.log("1: Bad, 2: Good");
 					try {
 						vars[str1] = Parser.parse(str2).evaluate(vars);
 	    				return vars[str1];
@@ -67,6 +73,7 @@ var history = [],
 					}
 				} else if (!canParse(str2) && canParse(str1)) { //If you can't parse str2
 					//Assign value to str2
+					console.log("1: Good, 2: Bad");
 					try {
 						vars[str2] = Parser.parse(str1).evaluate(vars);
 	    				return vars[str2];
@@ -74,6 +81,7 @@ var history = [],
 						return e['message'];
 					}
 				} else if (canParse(str1) && canParse(str2)) {
+					console.log("Both good");
 					//Compare both sides
 					try {
 						var dif = Math.abs(Parser.parse(str1).evaluate(vars) - Parser.parse(str2).evaluate(vars));
@@ -86,6 +94,7 @@ var history = [],
 						return e['message'];
 					}
 				} else {
+					console.log("both bad");
 					return "error: syntax";
 				}
 			} else {
@@ -146,32 +155,5 @@ $(document).ready(function() {
 	var exp = Parser.parse("x+y");
 	console.log(exp.evaluate({"x": 4,"y": 2}));
 	*/
-
-	/*
-	$('.row div').on('contextmenu', function() {
-		return false;
-	}).mousedown(function(event) {
-		switch (event.which) {
-			case 1:
-				//Left click, insert expression
-				insertExp($(this).html());
-				break;
-			case 3:
-				//Right click, copy expression
-				$('textarea').val($(this).html()).addClass('visible').keyup(function() {
-					$(this).removeClass('visible');
-					$('input').focus();
-				});
-				break;
-		}
-	}).mouseup(function() {
-		if ($('textarea').hasClass('visible')) {
-			$('textarea').select();
-		} else {
-			$('input').focus();
-		}
-	});
-	*/
-
 
 });

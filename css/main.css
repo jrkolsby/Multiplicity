@@ -16,6 +16,7 @@
 	font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Verdana, sans-serif;
 	font-size: 1.3em;
 	min-height: 1.3em;
+	overflow: hidden;
 	margin: 10px 0;
 	line-height: 125%;
 	color: #333;
@@ -58,5 +59,6 @@
 		font-size: 1em;
 		min-height: 1em;
 		padding: 5px 9px;
+		margin: 8px 0;
 	}
 }
