@@ -5,31 +5,6 @@
 	margin: 0 auto;
 	max-width: 900px;
 }
-textarea {
-	position: fixed;
-	margin: auto;
-	top: 0;
-	bottom: 0;
-	width: 100%;
-	text-align: center;
-	height: 2em;
-	font-size: 2em;
-	font-weight: 100;
-	font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Verdana, sans-serif;
-	box-shadow: 0 0 0 3000px rgba(255,255,255,0.7);
-	background: rgba(255,255,255,0.7);
-	border: none;
-	resize: none;
-	opacity: 0;
-	pointer-events: none;
-	color: #111;
-	transition: .2s opacity ease-in-out;
-	-webkit-transition: .2s opacity ease-in-out;
-}
-textarea.visible {
-	pointer-events: all;
-	opacity: 1;
-}
 .row {
 	width: 100%;
 	overflow: auto;
@@ -37,12 +12,13 @@ textarea.visible {
 }
 .row div,
 .row input {
+	display: block;
 	font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Verdana, sans-serif;
 	font-size: 1.3em;
 	min-height: 1.3em;
-	margin: 28px 0;
-	color: #333;
+	margin: 10px 0;
 	line-height: 125%;
+	color: #333;
 	padding: 6px 12px;
 	border-radius: 9px;
 	cursor: pointer;
@@ -68,8 +44,8 @@ textarea.visible {
 	cursor: auto;
 	width: 100%;
 	max-width: 100%;
-	padding: 0 12px;
 	background: transparent;
+	outline: none;
 	color: #333;
 }
 
@@ -82,8 +58,5 @@ textarea.visible {
 		font-size: 1em;
 		min-height: 1em;
 		padding: 5px 9px;
-	}
-	.row input {
-		padding: 0 9px;
 	}
 }

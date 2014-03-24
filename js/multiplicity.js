@@ -1,17 +1,16 @@
-var history = [
-		{
-			"exp": "3+5",
-			"ans": "8"
-		},
-	],
+var history = [],
+	historyIndex = 0,
+	vars = {
+		"pi": 3.141592653589
+	},
 	insertExp = function(text) {
 
 		//By Scott Klarr, from http://bit.ly/1dELy4Z
 
-	    var txtarea = document.getElementsByTagName("input")[0];
-	    var scrollPos = txtarea.scrollTop;
-	    var strPos = 0;
-	    var br = ((txtarea.selectionStart || txtarea.selectionStart == '0') ? 
+	    var txtarea = document.getElementsByTagName("input")[0],
+	    	scrollPos = txtarea.scrollTop,
+	    	strPos = 0;
+	    	br = ((txtarea.selectionStart || txtarea.selectionStart == '0') ? 
 	        "ff" : (document.selection ? "ie" : false ) );
 	    if (br == "ie") { 
 	        txtarea.focus();
@@ -40,22 +39,75 @@ var history = [
 	    }
 	    txtarea.scrollTop = scrollPos;
 	},
+	canParse = function(exp) {
+		try {
+			Parser.parse(exp).evaluate(vars);
+			return true;
+		} catch (e) {
+			return false;
+		}
+	}
 	assess = function(exp) {
+		exp = exp.replace(/(\)\()/g, ")*(") //For multiplying polynomials
+				 .replace(/\s+/g, "");
+
 		if (exp.length > 0) {
 			if (exp.indexOf("=") > -1) {
 				//Is assigning
+				var eq = exp.indexOf("="),
+					str1 = exp.substring(0,eq),
+					str2 = exp.substring(eq+1);
+				if (!canParse(str1) && canParse(str2)) { //If you can't parse str1
+					//Assign value to str1
+					try {
+						vars[str1] = Parser.parse(str2).evaluate(vars);
+	    				return vars[str1];
+					} catch (e) {
+						return e['message'];
+					}
+				} else if (!canParse(str2) && canParse(str1)) { //If you can't parse str2
+					//Assign value to str2
+					try {
+						vars[str2] = Parser.parse(str1).evaluate(vars);
+	    				return vars[str2];
+					} catch (e) {
+						return e['message'];
+					}
+				} else if (canParse(str1) && canParse(str2)) {
+					//Compare both sides
+					try {
+						var dif = Math.abs(Parser.parse(str1).evaluate(vars) - Parser.parse(str2).evaluate(vars));
+						if (dif < 0.0000000001) {
+							return "true";
+						} else {
+							return "false"
+						}
+					} catch (e) {
+						return e['message'];
+					}
+				} else {
+					return "error: syntax";
+				}
 			} else {
-				//Is expression
-				var ans = Parser.parse(exp).evaluate();
-				console.log(ans);
+				try {
+					return Parser.parse(exp).evaluate(vars);
+				} catch (e) {
+					return e['message'];
+				}
 			}
 		} else {
 			//No input, reenter last
+			return "error: null";
 		}
-		return ans;
 	},
 	log = function(exp, ans) {
-
+		var calc = {
+			"exp": exp,
+			"ans": ans
+		};
+		history.push(calc);
+		$("<div class='row'><div>"+exp+"</div><div>"+ans+"</div></div>").insertBefore("div.row#new");
+		window.scrollTo(0,document.body.scrollHeight);
 	}
 
 
@@ -63,9 +115,27 @@ var history = [
 $(document).ready(function() {
 	$('input').focus().keydown(function(event) {
 		if (event.keyCode == 13) {
-			//Assess input
-			assess($(this).val());
+			//Assess and log input
+			var value = $(this).val();
+			log(value, assess(value));
+			$(this).val("");
 		}
+	});
+
+	$('#wrap').delegate('.row div', 'contextmenu', function() {
+		return false;
+	}).delegate('.row div', 'mousedown', function(event) {
+		switch (event.which) {
+			case 1:
+				//Left click, insert expression
+				insertExp($(this).html());
+				break;
+			case 3:
+				//Right click, copy expression
+				break;
+		}
+	}).delegate('.row div', 'mouseup', function() {
+		$('input').focus();
 	});
 
 	/*
@@ -73,16 +143,21 @@ $(document).ready(function() {
 	console.log(Parser.parse("4+2").evaluate());
 	var exp = Parser.parse("x^2");
 	console.log(exp.evaluate({"x": 4}));
+	var exp = Parser.parse("x+y");
+	console.log(exp.evaluate({"x": 4,"y": 2}));
 	*/
 
+	/*
 	$('.row div').on('contextmenu', function() {
 		return false;
 	}).mousedown(function(event) {
 		switch (event.which) {
 			case 1:
+				//Left click, insert expression
 				insertExp($(this).html());
 				break;
 			case 3:
+				//Right click, copy expression
 				$('textarea').val($(this).html()).addClass('visible').keyup(function() {
 					$(this).removeClass('visible');
 					$('input').focus();
@@ -96,5 +171,7 @@ $(document).ready(function() {
 			$('input').focus();
 		}
 	});
+	*/
+
 
 });
