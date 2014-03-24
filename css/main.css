@@ -49,6 +49,21 @@
 	outline: none;
 	color: #333;
 }
+#info {
+	position: fixed;
+	bottom: 10px;
+	right: 10px;
+	width: 31px;
+	height: 31px;
+	cursor: pointer;
+	transition: .15s opacity ease-in-out;
+	-webkit-transition: .15s opacity ease-in-out;
+	background: #fff;
+	box-shadow: 0 0 5px 6px #fff;
+}
+#info:hover {
+	opacity: 0.5;
+}
 
 @media only screen and (max-width: 480px) {
 	#wrap {
@@ -60,5 +75,9 @@
 		min-height: 1em;
 		padding: 5px 9px;
 		margin: 8px 0;
+	}
+	#info {
+		width: 20px;
+		height: 20px;
 	}
 }

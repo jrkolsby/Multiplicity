@@ -1,7 +1,9 @@
 var history = [],
-	historyIndex = 0,
 	vars = {
-		"pi": 3.141592653589
+		"pi": 3.141592653589,
+		"tau":  6.283185307190,
+		"e": 2.718281828459,
+
 	},
 	insertExp = function(text) {
 		//insertExp by Scott Klarr, from http://bit.ly/1dELy4Z
@@ -47,8 +49,9 @@ var history = [],
 	}
 	assess = function(exp) {
 		exp = exp.replace(/(\)\()/g, ")*(") //For multiplying polynomials
-				 .replace(/\s+/g, "");
-				 
+				 .replace(/\s+/g, "") //Remove spaces
+				 .replace(/E/g, "*10^") //For scientific notation
+
 		//Coefficient solution by Jack at http://bit.ly/OPNKkd
 		exp = exp.replace(/\d[a-z]|[a-z]\d/i, function($0) {
     		return $0[0] + '*' + $0[1]; 
@@ -118,9 +121,6 @@ var history = [],
 		$("<div class='row'><div>"+exp+"</div><div>"+ans+"</div></div>").insertBefore("div.row#new");
 		window.scrollTo(0,document.body.scrollHeight);
 	}
-
-
-
 $(document).ready(function() {
 	$('input').focus().keydown(function(event) {
 		if (event.keyCode == 13) {
@@ -128,9 +128,12 @@ $(document).ready(function() {
 			var value = $(this).val();
 			log(value, assess(value));
 			$(this).val("");
+		} else if (event.keyCode == 38) {
+			$(this).val(history[history.length-1]['exp']);
+		} else if (event.keyCode == 40) {
+			$(this).val('');
 		}
 	});
-
 	$('#wrap').delegate('.row div', 'contextmenu', function() {
 		return false;
 	}).delegate('.row div', 'mousedown', function(event) {
@@ -146,14 +149,4 @@ $(document).ready(function() {
 	}).delegate('.row div', 'mouseup', function() {
 		$('input').focus();
 	});
-
-	/*
-	console.log(history[0]['ans']);
-	console.log(Parser.parse("4+2").evaluate());
-	var exp = Parser.parse("x^2");
-	console.log(exp.evaluate({"x": 4}));
-	var exp = Parser.parse("x+y");
-	console.log(exp.evaluate({"x": 4,"y": 2}));
-	*/
-
 });
