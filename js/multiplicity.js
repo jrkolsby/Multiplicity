@@ -8,7 +8,6 @@ var history = [],
 	insertExp = function(text) {
 		//insertExp by Scott Klarr, from http://bit.ly/1dELy4Z
 		var txtarea = document.getElementsByTagName("input")[0],
-			scrollPos = txtarea.scrollTop,
 			strPos = 0;
 			br = ((txtarea.selectionStart || txtarea.selectionStart == '0') ? 
 			"ff" : (document.selection ? "ie" : false ) );
@@ -37,7 +36,6 @@ var history = [],
 			txtarea.selectionEnd = strPos;
 			txtarea.focus();
 		}
-		txtarea.scrollTop = scrollPos;
 	},
 	canParse = function(exp) {
 		try {
