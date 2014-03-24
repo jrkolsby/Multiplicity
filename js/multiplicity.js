@@ -7,37 +7,37 @@ var history = [],
 	},
 	insertExp = function(text) {
 		//insertExp by Scott Klarr, from http://bit.ly/1dELy4Z
-	    var txtarea = document.getElementsByTagName("input")[0],
-	    	scrollPos = txtarea.scrollTop,
-	    	strPos = 0;
-	    	br = ((txtarea.selectionStart || txtarea.selectionStart == '0') ? 
-	        "ff" : (document.selection ? "ie" : false ) );
-	    if (br == "ie") { 
-	        txtarea.focus();
-	        var range = document.selection.createRange();
-	        range.moveStart ('character', -txtarea.value.length);
-	        strPos = range.text.length;
-	    }
-	    else if (br == "ff") strPos = txtarea.selectionStart;
+		var txtarea = document.getElementsByTagName("input")[0],
+			scrollPos = txtarea.scrollTop,
+			strPos = 0;
+			br = ((txtarea.selectionStart || txtarea.selectionStart == '0') ? 
+			"ff" : (document.selection ? "ie" : false ) );
+		if (br == "ie") { 
+			txtarea.focus();
+			var range = document.selection.createRange();
+			range.moveStart ('character', -txtarea.value.length);
+			strPos = range.text.length;
+		}
+		else if (br == "ff") strPos = txtarea.selectionStart;
 
-	    var front = (txtarea.value).substring(0,strPos);  
-	    var back = (txtarea.value).substring(strPos,txtarea.value.length); 
-	    txtarea.value=front+text+back;
-	    strPos = strPos + text.length;
-	    if (br == "ie") {
-	        txtarea.focus();
-	        var range = document.selection.createRange();
-	        range.moveStart ('character', -txtarea.value.length);
-	        range.moveStart ('character', strPos);
-	        range.moveEnd ('character', 0);
-	        range.select();
-	    }
-	    else if (br == "ff") {
-	        txtarea.selectionStart = strPos;
-	        txtarea.selectionEnd = strPos;
-	        txtarea.focus();
-	    }
-	    txtarea.scrollTop = scrollPos;
+		var front = (txtarea.value).substring(0,strPos);  
+		var back = (txtarea.value).substring(strPos,txtarea.value.length); 
+		txtarea.value=front+text+back;
+		strPos = strPos + text.length;
+		if (br == "ie") {
+			txtarea.focus();
+			var range = document.selection.createRange();
+			range.moveStart ('character', -txtarea.value.length);
+			range.moveStart ('character', strPos);
+			range.moveEnd ('character', 0);
+			range.select();
+		}
+		else if (br == "ff") {
+			txtarea.selectionStart = strPos;
+			txtarea.selectionEnd = strPos;
+			txtarea.focus();
+		}
+		txtarea.scrollTop = scrollPos;
 	},
 	canParse = function(exp) {
 		try {
@@ -54,11 +54,8 @@ var history = [],
 
 		//Coefficient solution by Jack at http://bit.ly/OPNKkd
 		exp = exp.replace(/\d[a-z]|[a-z]\d/i, function($0) {
-    		return $0[0] + '*' + $0[1]; 
+			return $0[0] + '*' + $0[1]; 
 		});
-
-		console.log(exp);
-
 		if (exp.length > 0) {
 			if (exp.indexOf("=") > -1) {
 				//Is assigning
@@ -70,7 +67,7 @@ var history = [],
 					console.log("1: Bad, 2: Good");
 					try {
 						vars[str1] = Parser.parse(str2).evaluate(vars);
-	    				return vars[str1];
+						return vars[str1];
 					} catch (e) {
 						return e['message'];
 					}
@@ -79,7 +76,7 @@ var history = [],
 					console.log("1: Good, 2: Bad");
 					try {
 						vars[str2] = Parser.parse(str1).evaluate(vars);
-	    				return vars[str2];
+						return vars[str2];
 					} catch (e) {
 						return e['message'];
 					}
@@ -87,8 +84,8 @@ var history = [],
 					console.log("Both good");
 					//Compare both sides
 					try {
-						var dif = Math.abs(Parser.parse(str1).evaluate(vars) - Parser.parse(str2).evaluate(vars));
-						if (dif < 0.0000000001) {
+						var dif = Math.abs((Parser.parse(str1).evaluate(vars) - Parser.parse(str2).evaluate(vars))/Parser.parse(str1).evaluate(vars));
+						if (dif < 0.000001) {
 							return "true";
 						} else {
 							return "false"
