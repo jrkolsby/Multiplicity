@@ -76,9 +76,22 @@
 	height: 100%;
 	position: fixed;
 	background: rgba(255,255,255,0.8);
+	opacity: 0;
+	pointer-events: none;
+	transition: .2s opacity ease-in-out;
+	-webkit-transition: .2s opacity ease-in-out;
+}
+#help.active {
+	opacity: 1;
+	pointer-events: all;
+	transition: .2s opacity ease-in-out;
+	-webkit-transition: .2s opacity ease-in-out;
 }
 #help-wrap {
-	
+	margin: 0 auto;
+	width: 100%;
+	padding: 30px;
+	max-width: 700px;
 }
 
 @media only screen and (max-width: 480px) {
