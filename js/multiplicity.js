@@ -2,8 +2,7 @@ var history = [],
 	vars = {
 		"pi": 3.141592653589,
 		"tau":  6.283185307190,
-		"e": 2.718281828459,
-
+		"e": 2.718281828459
 	},
 	insertExp = function(text) {
 		//insertExp by Scott Klarr, from http://bit.ly/1dELy4Z
@@ -41,71 +40,53 @@ var history = [],
 		try {
 			Parser.parse(exp).evaluate(vars);
 			return true;
-		} catch (e) {
-			return false;
-		}
+		} catch(e) {return false}
 	}
 	assess = function(exp) {
-		exp = exp.replace(/(\)\()/g, ")*(") //For multiplying polynomials
-				 .replace(/\s+/g, "") //Remove spaces
-				 .replace(/E/g, "*10^") //For scientific notation
+		exp = exp.replace(/\s+/g, "") //Remove spaces
+				.replace(/(\)\()/g, ")*(") //For multiplying polynomials
+				//Scientific notation solution
+				.replace(/[-+]?[0-9]*\.?[0-9]*E[-+]?[0-9]*\.?[0-9]*/g, function($0) {
+					return '(' + $0 + '))';
+				}).replace(/E/g, "*10^(")
+				//Coefficient solution inspired by Jack at http://bit.ly/OPNKkd
+				.replace(/\d[a-z]|[a-z]\d|\d\(|\)(\d|[a-z])/gi, function($0) {
+					return $0[0] + '*' + $0[1];
+				});
 
-		//Coefficient solution by Jack at http://bit.ly/OPNKkd
-		exp = exp.replace(/\d[a-z]|[a-z]\d/i, function($0) {
-			return $0[0] + '*' + $0[1]; 
-		});
 		if (exp.length > 0) {
 			if (exp.indexOf("=") > -1) {
 				//Is assigning
 				var eq = exp.indexOf("="),
 					str1 = exp.substring(0,eq),
 					str2 = exp.substring(eq+1);
-				if (!canParse(str1) && canParse(str2)) { //If you can't parse str1
-					//Assign value to str1
-					console.log("1: Bad, 2: Good");
-					try {
+				if (!canParse(str1) && canParse(str2)) {
+					//Make variable of str1
+					if (str1.match(/\d/) == null) {
 						vars[str1] = Parser.parse(str2).evaluate(vars);
 						return vars[str1];
-					} catch (e) {
-						return e['message'];
-					}
-				} else if (!canParse(str2) && canParse(str1)) { //If you can't parse str2
-					//Assign value to str2
-					console.log("1: Good, 2: Bad");
-					try {
+					} else { return "<span>variable contains numericals</span>" }
+				} else if (!canParse(str2) && canParse(str1)) {
+					//Make variable of str2
+					if (str1.match(/\d/) == null) {
 						vars[str2] = Parser.parse(str1).evaluate(vars);
 						return vars[str2];
-					} catch (e) {
-						return e['message'];
-					}
-				} else if (canParse(str1) && canParse(str2)) {
-					console.log("Both good");
+					} else { return "<span>variable contains numericals</span>" }
+				} else {
 					//Compare both sides
 					try {
-						var dif = Math.abs((Parser.parse(str1).evaluate(vars) - Parser.parse(str2).evaluate(vars))/Parser.parse(str1).evaluate(vars));
-						if (dif < 0.000001) {
+						var dif = Math.abs(Parser.parse(str1).evaluate(vars) - Parser.parse(str2).evaluate(vars));
+						if (dif < 0.00000001) {	
 							return "true";
-						} else {
-							return "false"
-						}
-					} catch (e) {
-						return e['message'];
-					}
-				} else {
-					console.log("both bad");
-					return "error: syntax";
+						} else { return "false" }
+					} catch(e) { return "<span>"+e['message']+"</span>" }
 				}
 			} else {
 				try {
 					return Parser.parse(exp).evaluate(vars);
-				} catch (e) {
-					return e['message'];
-				}
+				} catch(e) { return "<span>"+e['message']+"</span>" }
 			}
-		} else {
-			//No input, reenter last
-			return "error: null";
-		}
+		} else { return "<span>null</span>" }
 	},
 	log = function(exp, ans) {
 		var calc = {
@@ -113,6 +94,7 @@ var history = [],
 			"ans": ans
 		};
 		history.push(calc);
+		console.log(history);
 		$("<div class='row'><div>"+exp+"</div><div>"+ans+"</div></div>").insertBefore("div.row#new");
 		window.scrollTo(0,document.body.scrollHeight);
 	}
@@ -125,16 +107,13 @@ $(document).ready(function() {
 			$(this).val("");
 		} else if (event.keyCode == 38) {
 			$(this).val(history[history.length-1]['exp']);
-		} else if (event.keyCode == 40) {
-			$(this).val('');
-		}
+		} else if (event.keyCode == 40) { $(this).val('') }
 	});
 	$('#wrap').delegate('.row div', 'contextmenu', function() {
 		return false;
 	}).delegate('.row div', 'mousedown', function(event) {
 		switch (event.which) {
 			case 1:
-				//Left click, insert expression
 				insertExp($(this).html());
 				break;
 			case 3:

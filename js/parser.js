@@ -196,7 +196,7 @@ var Parser = (function (scope) {
 						nstack.push(this.functions[item.index_]);
 					}
 					else {
-						throw new Error("error: undefined variable: " + item.index_);
+						throw new Error("undefined variable: " + item.index_);
 					}
 				}
 				else if (type_ === TOP1) {
@@ -216,15 +216,15 @@ var Parser = (function (scope) {
 						}
 					}
 					else {
-						throw new Error("error: " + f + " is not a function");
+						throw new Error(f + " is not a function");
 					}
 				}
 				else {
-					throw new Error("error: invalid expression");
+					throw new Error("invalid expression");
 				}
 			}
 			if (nstack.length > 1) {
-				throw new Error("error: invalid expression (parity)");
+				throw new Error("invalid expression (parity)");
 			}
 			return nstack[0];
 		},
@@ -603,7 +603,8 @@ var Parser = (function (scope) {
 
 		error_parsing: function (column, msg) {
 			this.success = false;
-			this.errormsg = "parse error [column " + (column) + "]: " + msg;
+			//this.errormsg = "parse error [column " + (column) + "]: " + msg;
+			this.errormsg = msg;
 			throw new Error(this.errormsg);
 		},
 
