@@ -19,7 +19,6 @@ var history = [],
 			strPos = range.text.length;
 		}
 		else if (br == "ff") strPos = txtarea.selectionStart;
-
 		var front = (txtarea.value).substring(0,strPos);  
 		var back = (txtarea.value).substring(strPos,txtarea.value.length); 
 		txtarea.value=front+text+back;
@@ -46,14 +45,18 @@ var history = [],
 	}
 	assess = function(exp) {
 		exp = exp.replace(/\s+/g, "")
-				//Scientific notation solution
-				.replace(/[-+]?[0-9]*\.?[0-9]*E[-+]?[0-9]*\.?[0-9]*/g, function($0) {
-					return '(' + $0 + '))';
-				}).replace(/E/g, "*10^(")
-				//Coefficient solution, omits possible functions
-				.replace(/\d[a-z]|[a-z]\d|\d\(|\)(\d|[a-z])|\)\(/gi, function($0) {
-					return $0[0] + '*' + $0[1];
-				});
+				 //Scientific notation
+				 .replace(/[-+]?[0-9]*\.?[0-9]*E[-+]?[0-9]*\.?[0-9]*/g, function($0) {
+					 return '(' + $0 + '))';
+				 }).replace(/E/g, "*10^(")
+				 //Coefficients
+				 .replace(/\d[a-z]|[a-z]\d|\d\(|\)(\d|[a-z])|\)\(/gi, function($0) {
+					 return $0[0] + '*' + $0[1];
+				 })
+		//Ans functionality
+		if (history.length > 0) {
+			exp = exp.replace(/ans/gi, history[history.length-1]['ans']);
+		}
 
 		if (exp.length > 0) {
 			if (exp.indexOf("=") > -1) {
@@ -104,25 +107,31 @@ $(document).ready(function() {
 	$('input').focus().keydown(function(event) {
 		if (event.keyCode == 13) {
 			//Assess and log input
-			var value = $(this).val();
-			log(value, assess(value));
-			$(this).val("");
+			log(this.value, assess(this.value));
+			this.value = "";
 		} else if (event.keyCode == 38) {
 			if (historyPos > 0) {
 				if (historyPos == history.length) {
-					recentVal = $(this).val();
+					recentVal = this.value;
 				}
 				historyPos -= 1;
-				$(this).val(history[historyPos]['exp']);
+				this.value = history[historyPos]['exp'];
 			}
 		} else if (event.keyCode == 40) {
 			if (historyPos < history.length-1) {
 				historyPos += 1;
-				$(this).val(history[historyPos]['exp']);
+				this.value = history[historyPos]['exp'];
 			} else if (historyPos == history.length-1) {
 				historyPos = history.length;
-				$(this).val(recentVal);
+				this.value = recentVal;
 			}
+		} else if (this.value.length == 0) {
+			var input = this;
+			setTimeout(function() {
+				if (input.value.match(/(\/|\*|\+|\-)/) !== null) {
+					input.value = "ans" + input.value;
+				}
+			}, 0);
 		}
 	});
 	$('#wrap').delegate('.row div', 'contextmenu', function() {

@@ -591,7 +591,7 @@ var Parser = (function (scope) {
 			if (noperators + 1 !== tokenstack.length) {
 				//print(noperators + 1);
 				//print(tokenstack);
-				this.error_parsing(this.pos, "parity");
+				this.error_parsing(this.pos, "error");
 			}
 
 			return new Expression(tokenstack, object(this.ops1), object(this.ops2), object(this.functions));
