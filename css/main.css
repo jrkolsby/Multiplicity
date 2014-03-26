@@ -123,16 +123,29 @@ li.item span {
 #button {
 	position: fixed;
 	right: 10px;
-	width: 31px;
-	height: 31px;
 	cursor: pointer;
+	display: block;
 	transition: .15s opacity ease-in-out;
 	-webkit-transition: .15s opacity ease-in-out;
 	background: #fff;
 	box-shadow: 0 0 5px 6px #fff;
 }
-#button.help {
-	bottom: 10px;
+#button span {
+	color: #9C9C9C;
+	font-family: 'Montserrat', sans-serif;
+	font-weight: 300;
+	font-size: 1.2em;
+	position: relative;
+	bottom: 8px;
+	text-transform: uppercase;
+	margin-right: 10px;
+}
+#button img {
+	width: 31px;
+	height: 31px;
+}
+#button.info {
+	bottom: 5px;
 }
 #button.close {
 	top: 10px;
@@ -165,8 +178,13 @@ li.item span {
 	li.item p {
 		font-size: 0.87em;
 	}
-	#button {
+	#button img {
 		width: 18px;
 		height: 18px;
+	}
+	#button span {
+		font-size: 0.9em;
+		bottom: 4px;
+		margin-right: 6px;
 	}
 }

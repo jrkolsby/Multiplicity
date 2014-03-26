@@ -104,7 +104,7 @@ var history = [],
 		window.scrollTo(0,document.body.scrollHeight);
 	}
 $(document).ready(function() {
-	$('#button.help').click(function() {
+	$('#button.info').click(function() {
 		$('#help').addClass('active');
 	});
 	$('#button.close').click(function() {
