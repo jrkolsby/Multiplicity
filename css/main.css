@@ -58,8 +58,8 @@
 }
 #help {
 	width: 100%;
-	overflow: auto;
-	position: absolute;
+	position: fixed;
+	overflow: scroll;
 	background: rgba(255,255,255,0.9);
 	opacity: 0;
 	pointer-events: none;
@@ -67,7 +67,12 @@
 	-webkit-transition: .2s opacity ease-in-out;
 }
 #help.active {
+	height: auto;
+	overflow: auto;
+}
+#help.active {
 	opacity: 1;
+	position: absolute;
 	pointer-events: all;
 	transition: .2s opacity ease-in-out;
 	-webkit-transition: .2s opacity ease-in-out;
@@ -114,6 +119,21 @@ li.item p {
 }
 li.item span {
 	color: #F2636E;
+}
+#button {
+	position: fixed;
+	bottom: 10px;
+	right: 10px;
+	width: 31px;
+	height: 31px;
+	cursor: pointer;
+	transition: .15s opacity ease-in-out;
+	-webkit-transition: .15s opacity ease-in-out;
+	background: #fff;
+	box-shadow: 0 0 5px 6px #fff;
+}
+#button:hover {
+	opacity: 0.5;
 }
 
 @media only screen and (max-width: 480px) {

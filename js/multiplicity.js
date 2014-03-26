@@ -104,6 +104,9 @@ var history = [],
 		window.scrollTo(0,document.body.scrollHeight);
 	}
 $(document).ready(function() {
+	$('#button').click(function() {
+		$('#help').addClass('active');
+	});
 	$('input').focus().keydown(function(event) {
 		if (event.keyCode == 13) {
 			//Assess and log input
