@@ -273,11 +273,11 @@ var Parser = (function (scope) {
 					nstack.push(f + "(" + n1 + ")");
 				}
 				else {
-					throw new Error("invalid Expression");
+					throw new Error("invalid expression");
 				}
 			}
 			if (nstack.length > 1) {
-				throw new Error("invalid Expression (parity)");
+				throw new Error("invalid expression (parity)");
 			}
 			return nstack[0];
 		},

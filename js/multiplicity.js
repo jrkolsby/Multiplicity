@@ -72,12 +72,11 @@ var history = [],
 					} else { return "<span>variable contains numericals</span>" }
 				} else if (!canParse(str2) && canParse(str1)) {
 					//Make variable of str2
-					if (str1.match(/\d/) == null) {
+					if (str2.match(/\d/) == null) {
 						vars[str2] = Parser.parse(str1).evaluate(vars);
 						return vars[str2];
 					} else { return "<span>variable contains numericals</span>" }
 				} else {
-					//Compare both sides
 					try {
 						var dif = Math.abs(Parser.parse(str1).evaluate(vars) - Parser.parse(str2).evaluate(vars));
 						if (dif < 0.00000001) {	
@@ -87,7 +86,8 @@ var history = [],
 				}
 			} else {
 				try {
-					return Parser.parse(exp).evaluate(vars);
+					var eval = Parser.parse(exp).evaluate(vars).toString();
+					return eval.replace(/e/g, "E"); //Fix javascript's scientific notation
 				} catch(e) { return "<span>"+e['message']+"</span>" }
 			}
 		} else { return "<span>null</span>" }
