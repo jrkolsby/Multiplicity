@@ -134,15 +134,15 @@ li.item span {
 	color: #9C9C9C;
 	font-family: 'Montserrat', sans-serif;
 	font-weight: 300;
-	font-size: 1.2em;
+	font-size: 1.1em;
 	position: relative;
 	bottom: 8px;
 	text-transform: uppercase;
-	margin-right: 10px;
+	margin-right: 8px;
 }
 #button img {
-	width: 31px;
-	height: 31px;
+	width: 27px;
+	height: 27px;
 }
 #button.info {
 	bottom: 5px;

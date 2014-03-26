@@ -135,7 +135,7 @@ $(document).ready(function() {
 		} else if (this.value.length == 0) {
 			var input = this;
 			setTimeout(function() {
-				if (input.value.match(/(\/|\*|\+|\-)/) !== null) {
+				if (input.value.match(/(\/|\*|\+|\-|\=)/) !== null) {
 					input.value = "ans" + input.value;
 				}
 			}, 0);
@@ -151,7 +151,7 @@ $(document).ready(function() {
 				}
 				break;
 			case 3:
-				//Right click, copy expression
+				//Find a way to copy to clipboard
 				break;
 		}
 	}).delegate('.row div', 'mouseup', function() {
