@@ -122,7 +122,6 @@ li.item span {
 }
 #button {
 	position: fixed;
-	bottom: 10px;
 	right: 10px;
 	width: 31px;
 	height: 31px;
@@ -131,6 +130,12 @@ li.item span {
 	-webkit-transition: .15s opacity ease-in-out;
 	background: #fff;
 	box-shadow: 0 0 5px 6px #fff;
+}
+#button.help {
+	bottom: 10px;
+}
+#button.close {
+	top: 10px;
 }
 #button:hover {
 	opacity: 0.5;
@@ -159,5 +164,9 @@ li.item span {
 	}
 	li.item p {
 		font-size: 0.87em;
+	}
+	#button {
+		width: 18px;
+		height: 18px;
 	}
 }

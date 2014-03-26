@@ -104,9 +104,13 @@ var history = [],
 		window.scrollTo(0,document.body.scrollHeight);
 	}
 $(document).ready(function() {
-	$('#button').click(function() {
+	$('#button.help').click(function() {
 		$('#help').addClass('active');
 	});
+	$('#button.close').click(function() {
+		$('#help').removeClass('active');
+	});
+	
 	$('input').focus().keydown(function(event) {
 		if (event.keyCode == 13) {
 			//Assess and log input
