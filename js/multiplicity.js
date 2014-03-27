@@ -44,19 +44,20 @@ var history = [],
 		} catch(e) {return false}
 	}
 	assess = function(exp) {
+		if (history.length > 0) {
+			exp = exp.replace(/ans/gi, history[history.length-1]['ans']);
+		}
 		exp = exp.replace(/\s+/g, "")
 				 //Scientific notation
-				 .replace(/[-+]?[0-9]*\.?[0-9]*E[-+]?[0-9]*\.?[0-9]*/g, function($0) {
-					 return '(' + $0 + '))';
-				 }).replace(/E/g, "*10^(")
+				 .replace(/([-+]?[0-9]*\.?[0-9]*)E([-+]?[0-9]*\.?[0-9]*)/g, "(($1)*10^($2))")
 				 //Coefficients
 				 .replace(/\d[a-z]|[a-z]\d|\d\(|\)(\d|[a-z])|\)\(/gi, function($0) {
 					 return $0[0] + '*' + $0[1];
 				 })
+				 .replace(/sec\((\S*)\)/g, "(1/cos($1))")
+				 .replace(/csc\((\S*)\)/g, "(1/sin($1))")
+				 .replace(/cot\((\S*)\)/g, "(1/tan($1))");
 		//Ans functionality
-		if (history.length > 0) {
-			exp = exp.replace(/ans/gi, history[history.length-1]['ans']);
-		}
 
 		if (exp.length > 0) {
 			if (exp.indexOf("=") > -1) {
@@ -99,7 +100,6 @@ var history = [],
 		};
 		history.push(calc);
 		historyPos=history.length;
-		console.log(history);
 		$("<div class='row'><div>"+exp+"</div><div>"+ans+"</div></div>").insertBefore("div.row#new");
 		window.scrollTo(0,document.body.scrollHeight);
 	}
@@ -135,7 +135,7 @@ $(document).ready(function() {
 		} else if (this.value.length == 0) {
 			var input = this;
 			setTimeout(function() {
-				if (input.value.match(/(\/|\*|\+|\-|\=)/) !== null) {
+				if (input.value.match(/(\/|\*|\+|\-|\=|\%|E)/) !== null) {
 					input.value = "ans" + input.value;
 				}
 			}, 0);
