@@ -157,11 +157,13 @@ $(document).ready(function() {
 		} else if (event.keyCode !== 8 && event.keyCode !== 46) {
 			var input = this;
 			setTimeout(function() {
-				if (input.value.match(/(sqrt|round|abs|log|sin|cos|tan|sec|csc|cot)(?!\()/) !== null) {
-					input.value = input.value.replace(/(sqrt|round|abs|log|sin|cos|tan|sec|csc|cot)(?!\()/, "$1()");
-					setCaretToPos(input.value.length-1);
+				var regexp = /(sqrt|round|abs|log|sin|cos|tan|sec|csc|cot)(?!\()/;
+				if (input.value.match(regexp) !== null) {
+					var index = input.value.match(regexp).index;
+					var length = input.value.match(regexp)[0].length;
+					input.value = input.value.replace(regexp, "$1()");
+					setCaretToPos(index+length+1);
 				}
-
 			}, 0);		
 		}
 	});
