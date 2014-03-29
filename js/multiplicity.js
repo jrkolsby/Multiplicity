@@ -6,6 +6,23 @@ var history = [],
 		"tau":  6.283185307190,
 		"e": 2.7182818284590
 	},
+	setSelectionRange = function(selectionStart, selectionEnd) {
+		//SetSelectionRange by codingspot.com, from http://bit.ly/1pD0dDn
+		var input = document.getElementsByTagName("input")[0]
+		if (input.setSelectionRange) {
+			input.focus();
+			input.setSelectionRange(selectionStart, selectionEnd);
+		} else if (input.createTextRange) {
+			var range = input.createTextRange();
+			range.collapse(true);
+			range.moveEnd('character', selectionEnd);
+			range.moveStart('character', selectionStart);
+			range.select();
+		}
+	},
+	setCaretToPos = function(pos) {
+		setSelectionRange(pos, pos);
+	}
 	insertExp = function(text) {
 		//insertExp by Scott Klarr, from http://bit.ly/1dELy4Z
 		var txtarea = document.getElementsByTagName("input")[0],
@@ -54,10 +71,9 @@ var history = [],
 				 .replace(/\d[a-z]|[a-z]\d|\d\(|\)(\d|[a-z])|\)\(/gi, function($0) {
 					 return $0[0] + '*' + $0[1];
 				 })
-				 .replace(/sec\((\S*)\)/g, "(1/cos($1))")
-				 .replace(/csc\((\S*)\)/g, "(1/sin($1))")
-				 .replace(/cot\((\S*)\)/g, "(1/tan($1))");
-
+				 .replace(/sec\(([^)]+)\)/g, "(1/cos($1))")
+				 .replace(/csc\(([^)]+)\)/g, "(1/sin($1))")
+				 .replace(/cot\(([^)]+)\)/g, "(1/tan($1))");
 		if (exp.length > 0) {
 			if (exp.indexOf("=") > -1) {
 				//Is assigning
@@ -138,10 +154,14 @@ $(document).ready(function() {
 					input.value = "ans" + input.value;
 				}
 			}, 0);
-		} else {
+		} else if (event.keyCode !== 8 && event.keyCode !== 46) {
 			var input = this;
 			setTimeout(function() {
-				input.value = input.value.replace(/(sqrt|round|abs|log|sin|cos|tan|sec|csc|cot)(?!\()/, "$1(");
+				if (input.value.match(/(sqrt|round|abs|log|sin|cos|tan|sec|csc|cot)(?!\()/) !== null) {
+					input.value = input.value.replace(/(sqrt|round|abs|log|sin|cos|tan|sec|csc|cot)(?!\()/, "$1()");
+					setCaretToPos(input.value.length-1);
+				}
+
 			}, 0);		
 		}
 	});
