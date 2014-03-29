@@ -57,7 +57,6 @@ var history = [],
 				 .replace(/sec\((\S*)\)/g, "(1/cos($1))")
 				 .replace(/csc\((\S*)\)/g, "(1/sin($1))")
 				 .replace(/cot\((\S*)\)/g, "(1/tan($1))");
-		//Ans functionality
 
 		if (exp.length > 0) {
 			if (exp.indexOf("=") > -1) {
@@ -139,6 +138,11 @@ $(document).ready(function() {
 					input.value = "ans" + input.value;
 				}
 			}, 0);
+		} else {
+			var input = this;
+			setTimeout(function() {
+				input.value = input.value.replace(/(sqrt|round|abs|log|sin|cos|tan|sec|csc|cot)(?!\()/, "$1(");
+			}, 0);		
 		}
 	});
 	$('#wrap').delegate('.row div', 'contextmenu', function() {
