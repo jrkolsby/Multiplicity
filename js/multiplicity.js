@@ -109,6 +109,9 @@ var history = [],
 		} else { return "<span>null</span>" }
 	},
 	log = function(exp, ans) {
+		if (ans === "NaN") {
+			ans = "<span>error</span>";
+		}
 		var calc = {
 			"exp": exp,
 			"ans": ans
