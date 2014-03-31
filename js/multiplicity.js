@@ -1,10 +1,18 @@
 var history = [],
 	historyPos = 0,
+	promIndex = 0,
 	recentVal = "";
 	vars = {
 		"pi": 3.141592653589,
 		"tau":  6.283185307190,
 		"e": 2.7182818284590
+	},
+	getUrlVars = function() {
+		var vars = {};
+    	var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+        	vars[key] = value;
+    	});
+    	return vars;
 	},
 	setSelectionRange = function(selectionStart, selectionEnd) {
 		//SetSelectionRange by codingspot.com, from http://bit.ly/1pD0dDn
@@ -22,7 +30,7 @@ var history = [],
 	},
 	setCaretToPos = function(pos) {
 		setSelectionRange(pos, pos);
-	}
+	},
 	insertExp = function(text) {
 		//insertExp by Scott Klarr, from http://bit.ly/1dELy4Z
 		var txtarea = document.getElementsByTagName("input")[0],
@@ -59,7 +67,7 @@ var history = [],
 			Parser.parse(exp).evaluate(vars);
 			return true;
 		} catch(e) {return false}
-	}
+	},
 	assess = function(exp) {
 		if (history.length > 0) {
 			exp = exp.replace(/ans/gi, history[history.length-1]['ans']);
@@ -95,7 +103,7 @@ var history = [],
 				} else {
 					try {
 						var dif = Math.abs(Parser.parse(str1).evaluate(vars) - Parser.parse(str2).evaluate(vars));
-						if (dif < 0.00000001) {	
+						if (dif < 0.00000001) {
 							return "true";
 						} else { return "false" }
 					} catch(e) { return "<span>"+e['message']+"</span>" }
@@ -109,6 +117,11 @@ var history = [],
 		} else { return "<span>null</span>" }
 	},
 	log = function(exp, ans) {
+		// Because when I think of romance, I think of Javascript
+		if (getUrlVars()['p'] == "s") {
+			ans = ["Sydney Wargo...", "...would you", "like to go", "to prom", "with me?", "...", "please?"][promIndex];
+			promIndex += 1;
+		}
 		if (ans === "NaN") {
 			ans = "<span>error</span>";
 		}
@@ -128,7 +141,6 @@ $(document).ready(function() {
 	$('#button.close').click(function() {
 		$('#help').removeClass('active');
 	});
-	
 	$('input').focus().keydown(function(event) {
 		if (event.keyCode == 13) {
 			//Assess and log input
