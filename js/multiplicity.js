@@ -1,5 +1,12 @@
-var history = [],
-	historyPos = 0,
+/*
+	I encountered a very strange bug where an array named 'history'
+	would always return a length of 1, regardless of its contents.
+	I therefore renamed the history variable to 'antiquity' which
+	was the only fix I could find for the problem at least on my
+	system.
+*/
+var antiquity = [],
+	antiquityPos = 0,
 	promIndex = 0,
 	recentVal = "";
 	vars = {
@@ -9,7 +16,8 @@ var history = [],
 	},
 	getUrlVars = function() {
 		var vars = {};
-    	var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+    	var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, 
+    											 function(m,key,value) {
         	vars[key] = value;
     	});
     	return vars;
@@ -69,8 +77,8 @@ var history = [],
 		} catch(e) {return false}
 	},
 	assess = function(exp) {
-		if (history.length > 0) {
-			exp = exp.replace(/ans/gi, history[history.length-1]['ans']);
+		if (antiquity.length > 0) {
+			exp = exp.replace(/ans/gi, antiquity[antiquity.length-1]['ans']);
 		}
 		exp = exp.replace(/\s+/g, "")
 				 //Scientific notation
@@ -102,7 +110,7 @@ var history = [],
 					} else { return "<span>variable contains numericals</span>" }
 				} else {
 					try {
-						var dif = Math.abs(Parser.parse(str1).evaluate(vars) - Parser.parse(str2).evaluate(vars));
+						var dif = Math.abs(Parser.parse(str1).evaluate(vars)-Parser.parse(str2).evaluate(vars));
 						if (dif < 0.00000001) {
 							return "true";
 						} else { return "false" }
@@ -119,7 +127,8 @@ var history = [],
 	log = function(exp, ans) {
 		// Because when I think of romance, I think of Javascript
 		if (getUrlVars()['p'] == "s") {
-			ans = ["Sydney Wargo...", "...would you", "like to go", "to prom", "with me?", "...", "please?"][promIndex];
+			ans = ["Sydney Wargo...", "...would you", "like to go", "to prom", 
+				   "with me?", "...", "please?"][promIndex];
 			promIndex += 1;
 		}
 		if (ans === "NaN") {
@@ -129,8 +138,8 @@ var history = [],
 			"exp": exp,
 			"ans": ans
 		};
-		history.push(calc);
-		historyPos=history.length;
+		antiquity.push(calc);
+		antiquityPos=antiquity.length;
 		$("<div class='row'><div>"+exp+"</div><div>"+ans+"</div></div>").insertBefore("div.row#new");
 		window.scrollTo(0,document.body.scrollHeight);
 	}
@@ -147,19 +156,19 @@ $(document).ready(function() {
 			log(this.value, assess(this.value));
 			this.value = "";
 		} else if (event.keyCode == 38) {
-			if (historyPos > 0) {
-				if (historyPos == history.length) {
+			if (antiquityPos > 0) {
+				if (antiquityPos == antiquity.length) {
 					recentVal = this.value;
 				}
-				historyPos -= 1;
-				this.value = history[historyPos]['exp'];
+				antiquityPos -= 1;
+				this.value = antiquity[antiquityPos]['exp'];
 			}
 		} else if (event.keyCode == 40) {
-			if (historyPos < history.length-1) {
-				historyPos += 1;
-				this.value = history[historyPos]['exp'];
-			} else if (historyPos == history.length-1) {
-				historyPos = history.length;
+			if (antiquityPos < antiquity.length-1) {
+				antiquityPos += 1;
+				this.value = antiquity[antiquityPos]['exp'];
+			} else if (antiquityPos == antiquity.length-1) {
+				antiquityPos = antiquity.length;
 				this.value = recentVal;
 			}
 		} else if (this.value.length == 0) {
