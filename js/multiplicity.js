@@ -142,6 +142,9 @@ var antiquity = [],
 		antiquityPos=antiquity.length;
 		$("<div class='row'><div>"+exp+"</div><div>"+ans+"</div></div>").insertBefore("div.row#new");
 		window.scrollTo(0,document.body.scrollHeight);
+	},
+	copyToClipboard = function(text) {
+  		window.prompt("Copy to clipboard: Cmd+C, Enter", text);
 	}
 $(document).ready(function() {
 	$('#button.info').click(function() {
@@ -201,7 +204,7 @@ $(document).ready(function() {
 				}
 				break;
 			case 3:
-				//Find a way to copy to clipboard
+				copyToClipboard($(this).html());
 				break;
 		}
 	}).delegate('.row div', 'mouseup', function() {
