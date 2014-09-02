@@ -145,6 +145,9 @@ var antiquity = [],
 	},
 	copyToClipboard = function(text) {
   		window.prompt("Copy to clipboard: Cmd+C, Enter", text);
+  		setTimeout(function() {
+    		$('input').focus();
+  		}, 0);
 	}
 $(document).ready(function() {
 	$('#button.info').click(function() {
