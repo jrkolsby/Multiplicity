@@ -181,7 +181,7 @@ $(document).ready(function() {
 		} else if (this.value.length == 0) {
 			var input = this;
 			setTimeout(function() {
-				if (input.value.match(/(\/|\*|\+|\-|\=|\%|E|\^)/) !== null) {
+				if (input.value.match(/(\/|\*|\+|\=|\%|E|\^)/) !== null) {
 					input.value = "ans" + input.value;
 				}
 			}, 0);
