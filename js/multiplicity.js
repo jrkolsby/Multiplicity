@@ -207,7 +207,11 @@ $(document).ready(function() {
 				}
 				break;
 			case 3:
-				copyToClipboard($(this).html());
+				//Round long decimals
+				console.log("decimal: " + parseFloat($(this).html()));
+				var decimal = parseFloat($(this).html());
+				decimal = Math.round((decimal) * 10000) / 10000;
+				copyToClipboard(decimal);
 				break;
 		}
 	}).delegate('.row div', 'mouseup', function() {
