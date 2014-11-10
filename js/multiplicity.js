@@ -81,6 +81,7 @@ var antiquity = [],
 			exp = exp.replace(/ans/gi, antiquity[antiquity.length-1]['ans']);
 		}
 		exp = exp.replace(/\s+/g, "")
+				 .replace(/,/g, "")
 				 //Scientific notation
 				 .replace(/([-+]?[0-9]*\.?[0-9]*)E([-+]?[0-9]*\.?[0-9]*)/g, "(($1)*10^($2))")
 				 //Coefficients
