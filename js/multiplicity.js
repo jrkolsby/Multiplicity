@@ -8,7 +8,8 @@
 var antiquity = [],
 	antiquityPos = 0,
 	promIndex = 0,
-	recentVal = "";
+	recentVal = "",
+	isRadian = true,
 	vars = {
 		"pi": 3.141592653589,
 		"tau":  6.283185307190,
@@ -90,7 +91,10 @@ var antiquity = [],
 				 })
 				 .replace(/sec\(([^)]+)\)/g, "(1/cos($1))")
 				 .replace(/csc\(([^)]+)\)/g, "(1/sin($1))")
-				 .replace(/cot\(([^)]+)\)/g, "(1/tan($1))");
+				 .replace(/cot\(([^)]+)\)/g, "(1/tan($1))")
+				 //Logs and natural logs
+				 .replace(/(log\([^)]+\))/g, "$1/log(10)")
+				 .replace(/ln\(([^)]+)\)/g, "log($1)")
 		if (exp.length > 0) {
 			if (exp.indexOf("=") > -1) {
 				//Is assigning
@@ -189,7 +193,7 @@ $(document).ready(function() {
 		} else if (event.keyCode !== 8 && event.keyCode !== 46) {
 			var input = this;
 			setTimeout(function() {
-				var regexp = /(sqrt|round|abs|log|sin|cos|tan|sec|csc|cot)(?!\()/;
+				var regexp = /(sqrt|round|abs|log|ln|sin|cos|tan|sec|csc|cot)(?!\()/;
 				if (input.value.match(regexp) !== null) {
 					var index = input.value.match(regexp).index;
 					var length = input.value.match(regexp)[0].length;
